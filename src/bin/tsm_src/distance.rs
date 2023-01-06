@@ -20,7 +20,7 @@ pub fn distance_total(nodes: &Vec<Node>) -> f64{
 }
 
 
-
+#[cfg(test)]
 mod tests {
     use crate::distance;
     use crate::Node;

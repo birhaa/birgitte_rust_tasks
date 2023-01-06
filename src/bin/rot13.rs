@@ -26,14 +26,9 @@ where T: Write{
     }
 }
 
-//TODO
 fn switch(i: usize) -> char{
-    if i < HALF_NUM_CHARS {
-        ALPABETH[i+HALF_NUM_CHARS]
-    }
-    else{
-        ALPABETH[i-HALF_NUM_CHARS] 
-    }
+    let idx = if i < HALF_NUM_CHARS {i+HALF_NUM_CHARS} else {i-HALF_NUM_CHARS};
+    ALPABETH[idx]
 }
 
 impl<T> Write for Rot13Writer<T>
@@ -66,6 +61,7 @@ fn main(){
  println!("result: {:?}", content.iter().map(|x| *x as char).collect::<String>());
 }
 
+#[cfg(test)]
 mod tests {
     use std::io::Write;
     use crate::Rot13Writer;

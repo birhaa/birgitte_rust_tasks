@@ -1,8 +1,3 @@
-use std::collections::{hash_map, HashMap};
-
-use rand::Rng;
-use plotly::{Histogram, Layout, Plot, Scatter};
-
 use crate::Node;
 use crate::distance_total;
 use crate::helpers;
@@ -58,7 +53,7 @@ pub fn tsp_simulated_annealing_2(nodes: &Vec<Node>, variation_fn: fn(nodes: &Vec
         let variations = all_variations(&variation_fn(&best_nodes));
 
         for i in 0..(variations.len()-1) {
-            if(num_evaluations > max_evaluations){done = true; break;}
+            if num_evaluations > max_evaluations {done = true; break;}
             num_evaluations+=1;
 
             let variation = &variations[i];
@@ -71,7 +66,7 @@ pub fn tsp_simulated_annealing_2(nodes: &Vec<Node>, variation_fn: fn(nodes: &Vec
                 best_nodes = variation.clone();
                 current_best_score = variation_score;
                 distances.push(current_best_score);
-                if(current_best_score < best_score){
+                if current_best_score < best_score {
                     best_score = current_best_score;
                 }
                 break;

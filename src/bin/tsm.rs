@@ -1,4 +1,4 @@
-use plotly::{Histogram, Layout, Plot, Scatter};
+use plotly::{Plot, Scatter};
 use std::time::{Instant};
 
 mod helpers;

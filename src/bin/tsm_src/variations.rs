@@ -11,7 +11,7 @@ pub fn swap_random_2_nodes(nodes: &Vec<Node>) -> Vec<Node>{
     let mut x1 = 0;
     let mut x2 = 0;
     let mut random = | | (rng.gen::<f64>()*((nodes.len()-1) as f64)).round() as usize;
-    while(x1 == x2){
+    while x1 == x2 {
         x1 = random();
         x2 = random();
     }
@@ -22,7 +22,7 @@ pub fn swap_random_chunk(nodes: &Vec<Node>) -> Vec<Node>{
     let mut x1 = 0;
     let mut x2 = 0;
     let chunk_size = random_size(1)+1;
-    while(x1 == x2){
+    while x1 == x2 {
         x1 = random_size(nodes.len() -1);
         x2 = random_size(nodes.len() -1);
     }
@@ -62,7 +62,7 @@ pub fn swap_random_best_of(nodes: &Vec<Node>) -> Vec<Node>{
 pub fn get_random_variations(nodes: &Vec<Node>, num: usize) -> Vec<Vec<Node>>{
     let mut rng = rand::thread_rng();
     let mut variations: Vec<Vec<Node>> = Vec::new();
-    for n in 1..num {
+    for _n in 1..num {
         let mut random = | | (rng.gen::<f64>()*((nodes.len()-1) as f64)).round() as usize;
         variations.push(swap_2_nodes(nodes, random(), random()))
     }
@@ -96,7 +96,7 @@ pub fn find_best( variations:Vec<Vec<Node>>) -> (Vec<Node>, f64){
     return (new_best.0.to_vec(), new_best.1)
 }
 
-
+#[cfg(test)]
 mod tests {
     use crate::Node;
     use crate::tsm_src::variations::all_variations;

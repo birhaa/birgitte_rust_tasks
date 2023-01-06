@@ -1,8 +1,3 @@
-use std::collections::{hash_map, HashMap};
-
-use rand::Rng;
-use plotly::{Histogram, Layout, Plot, Scatter};
-
 use crate::Node;
 use crate::distance_total;
 use crate::tsm_src::variations::*;
@@ -19,7 +14,7 @@ pub fn tsp_hill_climb(nodes: &Vec<Node>, variation_fn: fn(nodes: &Vec<Node>) -> 
     while num_evaluations < max_evaluations{
         let variation = variation_fn(&best_nodes);
         let variation_dist = distance_total(&variation);
-        if(variation_dist < best_dist){
+        if variation_dist < best_dist {
             num_evaluations = 0;
             best_nodes = variation;
             best_dist = variation_dist;
@@ -41,7 +36,6 @@ pub fn tsp_hill_climb_2(nodes: &Vec<Node>, variation_fn: fn(nodes: &Vec<Node>) -
     let mut distances: Vec<f64> = Vec::new();
 
     while num_evaluations < max_evaluations{
-        let mut move_made = false;
         let variations = all_variations(&variation_fn(&best_nodes));
 
         for i in 0..variations.len(){
@@ -54,14 +48,9 @@ pub fn tsp_hill_climb_2(nodes: &Vec<Node>, variation_fn: fn(nodes: &Vec<Node>) -
             if variation_score < best_score {
                 best_nodes = variation.clone();
                 best_score = variation_score;
-                move_made = true;
                 distances.push(best_score);
                 break;
             }
-        }
-        //No better solution, local minima
-        if(!move_made){
-            //break;
         }
     }
     return distances;
