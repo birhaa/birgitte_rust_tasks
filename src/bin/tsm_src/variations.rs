@@ -100,30 +100,69 @@ pub fn find_best(variations: Vec<Vec<Node>>) -> (Vec<Node>, f64) {
 
 #[cfg(test)]
 mod tests {
-    use crate::tsm_src::variations::all_variations;
+    use super::swap_random_2_nodes;
+    use crate::tsm_src::variations::{
+        all_variations, swap_closest_node_to_random, swap_random_chunk,
+    };
     use crate::Node;
 
+    fn get_nodes() -> Vec<Node> {
+        let mut nodes: Vec<Node> = Vec::new();
+        nodes.push(Node {
+            id: 0,
+            x: 4.0,
+            y: 5.0,
+        });
+        nodes.push(Node {
+            id: 1,
+            x: 1.0,
+            y: 2.0,
+        });
+        nodes.push(Node {
+            id: 3,
+            x: 6.0,
+            y: 7.0,
+        });
+        return nodes;
+    }
+
+    fn ids_to_string(nodes: &Vec<Node>) -> String {
+        return nodes
+            .iter()
+            .map(|n| n.id.to_string())
+            .fold(String::new(), |a, b| a + &b + ",");
+    }
+
     #[test]
-    fn test_move_all_variations() {
-        let nodes = {
-            let mut nodes: Vec<Node> = Vec::new();
-            nodes.push(Node {
-                id: 0,
-                x: 4.0,
-                y: 5.0,
-            });
-            nodes.push(Node {
-                id: 1,
-                x: 1.0,
-                y: 2.0,
-            });
-            nodes.push(Node {
-                id: 3,
-                x: 6.0,
-                y: 7.0,
-            });
-            nodes
-        };
+    fn test_swap_2_nodes() {
+        let nodes = get_nodes();
+        let variation = swap_random_2_nodes(&nodes);
+        let nodes_id = ids_to_string(&nodes);
+        let variation_id = ids_to_string(&variation);
+        assert_ne!(nodes_id, variation_id);
+    }
+
+    #[test]
+    fn test_swap_random_chunk() {
+        let nodes = get_nodes();
+        let variation = swap_random_chunk(&nodes);
+        let nodes_id = ids_to_string(&nodes);
+        let variation_id = ids_to_string(&variation);
+        assert_ne!(nodes_id, variation_id);
+    }
+
+    #[test]
+    fn test_swap_closest_node_to_random() {
+        let nodes = get_nodes();
+        let variation = swap_closest_node_to_random(&nodes);
+        let nodes_id = ids_to_string(&nodes);
+        let variation_id = ids_to_string(&variation);
+        assert_eq!(nodes_id, variation_id);
+    }
+
+    #[test]
+    fn test_all_variations() {
+        let nodes = get_nodes();
         let variations = all_variations(&nodes);
 
         assert_eq!(variations.len(), 3);
