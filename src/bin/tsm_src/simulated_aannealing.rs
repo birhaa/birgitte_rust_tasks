@@ -3,7 +3,7 @@ use crate::distance_total;
 use crate::helpers;
 use crate::tsm_src::variations::*;
 
-pub fn tsp_simulated_annealing(nodes: &Vec<Node>, variation_fn: fn(nodes: &Vec<Node>) -> Vec<Node>, max_evaluations: usize) -> Vec<f64> {
+pub fn tsp_simulated_annealing(nodes: &Vec<Node>, variation_fn: fn(nodes: &Vec<Node>) -> Vec<Node>) -> Vec<f64> {
 
     let mut best_nodes = nodes.to_vec();
     let mut best_dist = distance_total(&best_nodes);
@@ -13,7 +13,7 @@ pub fn tsp_simulated_annealing(nodes: &Vec<Node>, variation_fn: fn(nodes: &Vec<N
 
     let mut distances: Vec<f64> = Vec::new();
 
-    while num_evaluations < max_evaluations{
+    while num_evaluations < 300{
         let variation = variation_fn(&best_nodes);
         let variation_dist = distance_total(&variation);
 

@@ -1,5 +1,5 @@
 [alias] 
 fizzbuzz = "run --bin fizzbuzz"
 fibonacci = "run --bin fibonacci"
+rot13 = "run --bin rot13"
 tsm = "run --bin tsm"
-tsm2 = "run --bin tsm2"

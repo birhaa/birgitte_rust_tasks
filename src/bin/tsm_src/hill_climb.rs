@@ -4,14 +4,14 @@ use crate::tsm_src::variations::*;
 
 // algortihms 
 
-pub fn tsp_hill_climb(nodes: &Vec<Node>, variation_fn: fn(nodes: &Vec<Node>) -> Vec<Node>, max_evaluations: usize ) -> Vec<f64> {
+pub fn tsp_hill_climb(nodes: &Vec<Node>, variation_fn: fn(nodes: &Vec<Node>) -> Vec<Node> ) -> Vec<f64> {
     let mut best_nodes = nodes.to_vec();
     let mut best_dist = distance_total(&best_nodes);
     let mut num_evaluations = 1;
 
     let mut distances: Vec<f64> = Vec::new();
 
-    while num_evaluations < max_evaluations{
+    while num_evaluations < 300{
         let variation = variation_fn(&best_nodes);
         let variation_dist = distance_total(&variation);
         if variation_dist < best_dist {

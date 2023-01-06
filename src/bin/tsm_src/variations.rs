@@ -35,7 +35,7 @@ pub fn swap_random_chunk(nodes: &Vec<Node>) -> Vec<Node>{
     new_nodes
 }
 
-pub fn move_closest_node_to_random(nodes: &Vec<Node>) -> Vec<Node>{
+pub fn swap_closest_node_to_random(nodes: &Vec<Node>) -> Vec<Node>{
     let variation = nodes.clone();
     let idx = random_size(nodes.len()-1);
     let random_node =  &nodes[idx];
@@ -57,7 +57,7 @@ pub fn swap_random_best_of(nodes: &Vec<Node>) -> Vec<Node>{
     return find_best( variations).0;
 }
 
-// Variations
+// Multiple variations
 
 pub fn get_random_variations(nodes: &Vec<Node>, num: usize) -> Vec<Vec<Node>>{
     let mut rng = rand::thread_rng();

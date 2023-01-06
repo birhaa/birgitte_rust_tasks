@@ -8,35 +8,53 @@ pub use tsm_src::distance::*;
 pub use tsm_src::hill_climb::*;
 pub use tsm_src::simulated_aannealing::*;
 
-use crate::tsm_src::variations::swap_random_2_nodes;
+use crate::tsm_src::variations::*;
+
+
+fn get_variation_fn(v: usize) -> fn(nodes: &Vec<Node>) -> Vec<Node>{
+    match v {
+        0 => swap_random_2_nodes,
+        1 => swap_random_chunk,
+        2 => swap_closest_node_to_random,
+        3 => swap_random_best_of,
+        _ => swap_random_2_nodes
+    }
+}
+
+type AlgorithmFn = dyn Fn(&Vec<Node>, fn(nodes: &Vec<Node>) -> Vec<Node>) -> Vec<f64>;
 
 fn main() {
     const N: usize = 100;
-    const MAX_EVALUATION_NO_BETTER: usize = 300;
+    const V: usize = 0;
+    const DRAW_RESULTS: bool = true;
     let nodes = random_nodes(N);
     let mut solutions: Vec<Vec<f64>> = Vec::new();
+    let variation_fn = get_variation_fn(V);
+    let algorithms: Vec<(&str, &AlgorithmFn)> = vec![
+        ("Hill climb subset variation", &tsp_hill_climb), 
+        ("Hill climb all variation",&tsp_hill_climb_2), 
+        ("Simulated annealing subset variation", &tsp_simulated_annealing), 
+        ("Simulated annealing all variation", &tsp_simulated_annealing_2 )
+    ];
 
-    let start = Instant::now();
-    solutions.push(tsp_hill_climb(&nodes, swap_random_2_nodes, MAX_EVALUATION_NO_BETTER));
-    let mut dur = start.elapsed().as_millis();
-    println!("Finished nr1 with duration {dur}");
-    solutions.push(tsp_hill_climb_2(&nodes, swap_random_2_nodes));
-    dur = start.elapsed().as_millis();
-    println!("Finished nr2 with duration {dur}");
-    solutions.push(tsp_simulated_annealing(&nodes, swap_random_2_nodes, MAX_EVALUATION_NO_BETTER));
-    dur = start.elapsed().as_millis();
-    println!("Finished nr3 with duration {dur}");
-    solutions.push(tsp_simulated_annealing_2(&nodes, swap_random_2_nodes));
-    dur = start.elapsed().as_millis();
-    println!("Finished nr4 with duration {dur}");
-    // solutions.push(tsp_hill_climb(&nodes, swap_random_best_of));
-    // solutions.push(tsp_simulated_annealing(&nodes, swap_random_2_nodes, MAX_EVALUATION_NO_BETTER));
-    // solutions.push(tsp_simulated_annealing(&nodes, swap_random_best_of));
+    let mut start = Instant::now();
+    algorithms.iter().for_each(|a|{
+        let res = a.1(&nodes, variation_fn);
+        match res.last(){
+            Some(r) => println!("Finished {:?} with last result {:?} with duration {:?}",  a.0, r, start.elapsed().as_millis()),
+            None => println!("No result found")
+        }
+        solutions.push(res);
+        start = Instant::now();
+    });
 
-    solutions.iter().for_each(|sol| {
-        let trace = Scatter::new((0..sol.len()-1).collect(), sol.to_vec()).name("hc_history");
-        let mut plot = Plot::new();
-        plot.add_trace(trace);
-        plot.show();
-    })
+    if DRAW_RESULTS {
+        solutions.iter().for_each(|sol| {
+            let trace = Scatter::new((0..sol.len()-1).collect(), sol.to_vec()).name("hc_history");
+            let mut plot = Plot::new();
+            plot.add_trace(trace);
+            plot.show();
+        })
+    }
+
 }
