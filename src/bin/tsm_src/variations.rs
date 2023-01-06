@@ -1,31 +1,19 @@
-use rand::Rng;
-
 use crate::distance;
 use crate::distance_total;
 use crate::helpers::random::*;
 use crate::swap_2_nodes;
 use crate::Node;
 
+//Simple swapping of two random nodes
 pub fn swap_random_2_nodes(nodes: &Vec<Node>) -> Vec<Node> {
-    let mut rng = rand::thread_rng();
-    let mut x1 = 0;
-    let mut x2 = 0;
-    let mut random = || (rng.gen::<f64>() * ((nodes.len() - 1) as f64)).round() as usize;
-    while x1 == x2 {
-        x1 = random();
-        x2 = random();
-    }
+    let (x1, x2) = get_2_random_indices(nodes.len() - 1);
     return swap_2_nodes(nodes, x1, x2);
 }
 
+// Swap a random chunk with another random chunk at same size
 pub fn swap_random_chunk(nodes: &Vec<Node>) -> Vec<Node> {
-    let mut x1 = 0;
-    let mut x2 = 0;
     let chunk_size = random_size(1) + 1;
-    while x1 == x2 {
-        x1 = random_size(nodes.len() - 1);
-        x2 = random_size(nodes.len() - 1);
-    }
+    let (mut x1, mut x2) = get_2_random_indices(nodes.len() - 1);
     let mut new_nodes = nodes.to_vec();
     for i in 0..chunk_size {
         x1 = if x1 + i >= new_nodes.len() { 0 } else { x1 + i };
@@ -35,6 +23,7 @@ pub fn swap_random_chunk(nodes: &Vec<Node>) -> Vec<Node> {
     new_nodes
 }
 
+// Find the node that is closest and move it next to the random node
 pub fn swap_closest_node_to_random(nodes: &Vec<Node>) -> Vec<Node> {
     let variation = nodes.clone();
     let idx = random_size(nodes.len() - 1);
@@ -69,16 +58,17 @@ pub fn swap_random_best_of(nodes: &Vec<Node>) -> Vec<Node> {
 
 // Multiple variations
 
+// Returns a number of ramdom variations of swapping two random nodes
 pub fn get_random_variations(nodes: &Vec<Node>, num: usize) -> Vec<Vec<Node>> {
-    let mut rng = rand::thread_rng();
     let mut variations: Vec<Vec<Node>> = Vec::new();
     for _n in 1..num {
-        let mut random = || (rng.gen::<f64>() * ((nodes.len() - 1) as f64)).round() as usize;
+        let random = || random_size(nodes.len() - 1);
         variations.push(swap_2_nodes(nodes, random(), random()))
     }
     variations
 }
 
+// Return all variations without swapping node
 pub fn all_variations(nodes: &Vec<Node>) -> Vec<Vec<Node>> {
     let mut variations: Vec<Vec<Node>> = Vec::new();
     for i in 0..nodes.len() {
@@ -92,6 +82,7 @@ pub fn all_variations(nodes: &Vec<Node>) -> Vec<Vec<Node>> {
     variations
 }
 
+// Find the best variation of a number of variations
 pub fn find_best(variations: Vec<Vec<Node>>) -> (Vec<Node>, f64) {
     let new_best = variations
         .iter()
