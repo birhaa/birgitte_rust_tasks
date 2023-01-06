@@ -26,6 +26,8 @@ where T: Write{
     }
 }
 
+//Find letter in the 13th place after i. 
+//Starts from 0 if i is bigger than number of letter in the alphabeth
 fn switch(i: usize) -> char{
     let idx = if i < HALF_NUM_CHARS {i+HALF_NUM_CHARS} else {i-HALF_NUM_CHARS};
     ALPABETH[idx]
