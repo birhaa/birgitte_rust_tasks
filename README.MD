@@ -5,14 +5,14 @@ A set of task to learn rust
 
 ## Run
 
-### Taks 1
+### Fizzbuzz
 `cargo fizzbuzz`
 
-### Task 2
+### Fibonacco
 `cargo fibonacci`
 
-### Taks 3
+### Rot13
 `cargo rot13`
 
-### Task 4
+### Travelling sales man
 `cargo tsm`
