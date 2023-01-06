@@ -32,6 +32,8 @@ pub fn tsp_simulated_annealing(
         distances.push(best_dist);
         if current_temp > 0.01 {
             current_temp *= 0.99;
+        } else {
+            break;
         }
     }
 
@@ -56,7 +58,7 @@ pub fn tsp_simulated_annealing_2(
         let mut done = false;
         let variations = all_variations(&variation_fn(&best_nodes));
 
-        for i in 0..(variations.len() - 1) {
+        for i in 0..variations.len() {
             if num_evaluations > max_evaluations {
                 done = true;
                 break;
